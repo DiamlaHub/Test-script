@@ -252,7 +252,7 @@ local buttonNames = {
 }  
 
 local scripts = {  
-    'loadstring(game:HttpGet("https://raw.githubusercontent.com/DiamlaHub/TradeScam/refs/heads/main/TradeScript"))()',  
+    'loadstring(game:HttpGet("https://raw.githubusercontent.com/DiamlaHub/Trade/refs/heads/main/TradeScript"))()',  
     'loadstring(game:HttpGet("https://raw.githubusercontent.com/DiamlaHub/Dupe/refs/heads/main/DupeScript"))()',  
     'loadstring(game:HttpGet("https://raw.githubusercontent.com/DiamlaHub/Mutation/refs/heads/main/MutationScript"))()',  
     [[  
