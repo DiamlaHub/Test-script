@@ -49,7 +49,7 @@ loadingFrame.Parent = screenGui
 Instance.new("UICorner", loadingFrame).CornerRadius = UDim.new(0, 12)
 
 local loadingLabel = Instance.new("TextLabel", loadingFrame)
-loadingLabel.Size = UDim2.new(1, 0, 0.4, 0)
+loadingLabel.Size = UDim2.new(1, 0, 0.25, 0)
 loadingLabel.Position = UDim2.new(0, 0, 0, 10)
 loadingLabel.BackgroundTransparency = 1
 loadingLabel.Text = "Loading DiamlaHub"
@@ -57,9 +57,19 @@ loadingLabel.Font = Enum.Font.GothamBold
 loadingLabel.TextSize = 22
 loadingLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 
+-- New middle label
+local middleLabel = Instance.new("TextLabel", loadingFrame)
+middleLabel.Size = UDim2.new(1, 0, 0.25, 0)
+middleLabel.Position = UDim2.new(0, 0, 0.4, 0)
+middleLabel.BackgroundTransparency = 1
+middleLabel.Text = "Trade Scam | Duper | Mutation | Spawner"
+middleLabel.Font = Enum.Font.Gotham
+middleLabel.TextSize = 18
+middleLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+
 local loadingBarBg = Instance.new("Frame", loadingFrame)
 loadingBarBg.Size = UDim2.new(0.9, 0, 0, 20)
-loadingBarBg.Position = UDim2.new(0.05, 0, 0.7, 0)
+loadingBarBg.Position = UDim2.new(0.05, 0, 0.75, 0)
 loadingBarBg.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 Instance.new("UICorner", loadingBarBg).CornerRadius = UDim.new(0, 10)
 
