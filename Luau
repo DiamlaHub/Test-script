@@ -116,7 +116,7 @@ local function showWarningPrompt(onClose)
     msg.Size = UDim2.new(1, -20, 1, -70)
     msg.Position = UDim2.new(0, 10, 0, 40)
     msg.BackgroundTransparency = 1
-    msg.Text = "1.Rejoin\n2.Go to delta settings\n3.Turn off verify teleport, Anti scam, Anti Afk\n4.Reexecute\n5.Your all set"
+    msg.Text = "1.Rejoin\n2.Go to delta settings\n3.Turn off verify teleport, Anti scam, Anti Afk\n4.Reexecute\n5.You're all set"
     msg.TextWrapped = true
     msg.TextColor3 = Color3.fromRGB(255, 255, 255)
     msg.Font = Enum.Font.Gotham
