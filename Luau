@@ -58,7 +58,7 @@ getKey.BackgroundColor3 = Color3.fromRGB(0,200,100)
 Instance.new("UICorner", getKey).CornerRadius = UDim.new(0,8)
 
 getKey.MouseButton1Click:Connect(function()
-    setclipboard("https://pastebin.com/YqjQwt4Z")
+    setclipboard("https://pastebin.com/GsYzD6zG")
     msg.TextColor3 = Color3.fromRGB(0,255,255)
     msg.Text = "🌐 Key Link copied! Paste into browser"
 end)
