@@ -79,7 +79,7 @@ submit.MouseButton1Click:Connect(function()
         msg.Text = "✅ Correct key! Executing..."
         wait(1)
         screenGui:Destroy()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/DiamlaHub/diamlahub-gui/refs/heads/main/Lua"))()
+        loadstring(game:HttpGet("RAW SA MAIN GUI NYO"))()
     else
         msg.TextColor3 = Color3.fromRGB(255,80,80)
         msg.Text = "❌ Wrong Key"
